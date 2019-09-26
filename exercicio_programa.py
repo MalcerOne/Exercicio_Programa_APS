@@ -31,7 +31,7 @@ while i:
         print("Obrigado por jogar! Volte sempre!")
         break
     contador_seguranca = 0
-    while aposta > carteira or aposta < 0:
+    while aposta > carteira or aposta <= 0:
         contador_seguranca += 1
         print("Você não tem esse dinheiro! Aposte de novo. Você tem mais {0} tentativas\n"
               "antes de ser expulso da mesa. ".format(5-contador_seguranca))
