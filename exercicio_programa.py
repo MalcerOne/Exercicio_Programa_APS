@@ -1,7 +1,7 @@
 import random
 #Introducao do jogo para os players, alem de mostrar as regras do mesmo.
 def intro():
-    print("♠♣ Bem vindo ao Blackjack! ♥♦\n
+    print("♠♣ Bem vindo ao Blackjack! ♥♦\n"
           "Aproxime-se e veja se você consegue\n"
           "ganhar do dealer e chegar o mais perto de 21 possível sem estourar!\n\n"
           "As regras são as seguintes:\n"
