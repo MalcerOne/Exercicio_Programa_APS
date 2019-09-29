@@ -2,8 +2,8 @@ import random
 # Introducao do jogo para os players, alem de mostrar as regras do mesmo.
 def intro():
     print("♠♣ Bem vindo ao Blackjack! ♥♦\n"
-          "Aproxime-se e veja se você consegue\n"
-          "ganhar do dealer e chegar o mais perto de 21 possível sem estourar!\n\n"
+          "Aproxime-se e veja se você consegue ganhar do dealer e chegar o mais perto\n"
+          "de 21 possível sem estourar!\n\n"
           "As regras do Blackjack são as seguintes:\n"
           '--> O dealer te entrega duas cartas. Se a soma delas for exatamente 21,\n'
           'é Blackjack, e você ganha automaticamente!\n'
@@ -25,7 +25,7 @@ def intro():
           "Ah, claro, você pode digitar 'fim' a qualquer momento que quiser sair.\n"
           "--> Se divirta!")
 
-
+    
 intro()
 
 # Criacao dos baralhos
