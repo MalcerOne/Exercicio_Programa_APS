@@ -1,4 +1,6 @@
 import random
+
+
 # Introducao do jogo para os players, alem de mostrar as regras do mesmo.
 def intro():
     print("♠♣ Bem vindo ao Blackjack! ♥♦\n"
@@ -25,20 +27,23 @@ def intro():
           "Ah, claro, você pode digitar 'fim' a qualquer momento que quiser sair.\n"
           "--> Se divirta!")
 
-    
+
 intro()
 
 # Criacao dos baralhos
 
 numero_de_baralhos = 1
-baralho_base = ["Ac", "2c", "3c", "4c", "5c", "6c", "7c", "8c", "9c", "10c", "Jc", "Qc", "Kc","Ae", "2e", "3e", "4e", "5e", "6e", "7e", "8e", "9e", "10e", "Je", "Qe", "Ke","Ao", "2o", "3o", "4o", "5o", "6o", "7o", "8o", "9o", "10o", "Jo", "Qo", "Ko","Ap", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "Jp", "Qp", "Kp"]
+baralho_base = ["Ac", "2c", "3c", "4c", "5c", "6c", "7c", "8c", "9c", "10c", "Jc", "Qc", "Kc", "Ae", "2e", "3e", "4e",
+                "5e", "6e", "7e", "8e", "9e", "10e", "Je", "Qe", "Ke", "Ao", "2o", "3o", "4o", "5o", "6o", "7o", "8o",
+                "9o", "10o", "Jo", "Qo", "Ko", "Ap", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "Jp", "Qp",
+                "Kp"] * numero_de_baralhos
 
 # Dificuldade do jogo
 dificuldade_jogo = input("Qual a dificuldade do jogo? (mf, f, m, d): ")
 
 while dificuldade_jogo != "mf" and dificuldade_jogo != "f" and dificuldade_jogo != "m" and dificuldade_jogo != "d":
     print("Desculpe, dificuldade não encontrada. Tente de novo.")
-    dificuldade_jogo = input("Qual a dificuldade do jogo? (mt, f, m, d): ")
+    dificuldade_jogo = input("Qual a dificuldade do jogo? (mf, f, m, d): ")
 
 # Conforme a dificuldade aumenta, a disponibilidade de cartas fica mais escassa.
 if dificuldade_jogo == "mf":
@@ -63,45 +68,40 @@ while carteira <= 0 or carteira > 1000000:
     carteira = int(input("Quanto você quer gastar de dinheiro? (essa será sua carteira de apostas): "))
 
 # Loop do jogo.
+
+#Parametros iniciais, definições de variáveis e listas.
 i = True
+contador_seguranca = 0
+
+
 while i:
-    aposta = int(input("Quanto você quer apostar?: "))
-    if aposta == "fim":
+    aposta_string = input("Quanto você quer apostar?: ")
+    if aposta_string == "fim":
         print("Obrigado por jogar! Volte sempre!")
         break
-    contador_seguranca = 0
-    while aposta > carteira or aposta <= 0:
-        if contador_seguranca == 4:
+    aposta_int = int(aposta_string)
+#Criacao do loop para limite de erros na aposta.
+    while aposta_int > carteira or aposta_int <= 0:
+        contador_seguranca += 1
+        if contador_seguranca == 5:
             print("Nós avisamos. Os seguranças cuidarão de você.")
             i = False
             break
-        contador_seguranca += 1
-        if contador_seguranca == 4:
-            print("Você não tem esse dinheiro! Aposte de novo. É sua última tentativa\n"
-                  "antes de ser expulso da mesa. "
-        else:
+        if contador_seguranca == 4 and contador_seguranca != 5:
+            print("Você não tem esse dinheiro! Aposte de novo. Essa é sua última tentativa\n"
+                  "antes de ser expulso da mesa. ")
+            aposta_int = int(input("Quanto você quer apostar?: "))
+            continue
+        if contador_seguranca < 5:
             print("Você não tem esse dinheiro! Aposte de novo. Você tem mais {0} tentativas\n"
                   "antes de ser expulso da mesa. ".format(5 - contador_seguranca))
-        aposta = int(input("Quanto você quer apostar?: "))
-
-#Definindo as cartas que entram no jogo
-    baralho = []
-    for t in range(0,numero_de_baralhos):
-        for a in range(len(baralho_base)):
-            baralho.append(baralho_base[a])
-            
-#Embaralhando as cartas
-    monte=[]
-    n=len(baralho)
-    while n!= 0:
-        carta=baralho[random.randint(0,n-1)]
-        monte.append(carta)
-        b=0
-        while b < n:
-            if carta==baralho[b]:
-                  del baralho[b]
-                  break
-            b+=1
-        n-=1
-
-    i=False
+            aposta_int = int(input("Quanto você quer apostar?: "))
+# Embaralhando as cartas.
+    quantidade_de_cartas = len(baralho_base)
+    monte_embaralhado = []
+    while quantidade_de_cartas != 0:
+        randomizador = random.randint(0, quantidade_de_cartas - 1)
+        carta = baralho_base[randomizador]
+        monte_embaralhado.append(carta)
+        baralho_base.remove(carta)
+        quantidade_de_cartas -= 1
