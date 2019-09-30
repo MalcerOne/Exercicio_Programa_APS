@@ -113,4 +113,4 @@ while i:
     mao_jogador = []
     mao_jogador = monte[0:2].copy()
     del monte[0:2]
-    print ('Suas cartas são {0} , {1}').format(mao_jogador[0],mao_jogador[1]))
+    print ('Suas cartas são {0} e {1}.'.format(mao_jogador[0],mao_jogador[1]))
