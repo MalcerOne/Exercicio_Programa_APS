@@ -109,3 +109,8 @@ while i:
                 break
             indice_da_carta += 1
         quantidade_de_cartas -= 1
+#Computador dá as duas cartas do topo do monte para o jogador
+    mao_jogador = []
+    mao_jogador = monte[0:2].copy()
+    del monte[0:2]
+    print ('Suas cartas são {0} , {1}').format(mao_jogador[0],mao_jogador[1]))
