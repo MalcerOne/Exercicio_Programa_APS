@@ -26,17 +26,13 @@ def intro():
           "--> Quando você fica zerado, o jogo acaba, e boa sorte da próxima vez!\n"
           "Ah, claro, você pode digitar 'fim' a qualquer momento que quiser sair.\n"
           "--> Se divirta!")
-
-
 intro()
-
 # Criacao dos baralhos
 
-numero_de_baralhos = 1
 baralho_base = ["Ac", "2c", "3c", "4c", "5c", "6c", "7c", "8c", "9c", "10c", "Jc", "Qc", "Kc", "Ae", "2e", "3e", "4e",
                 "5e", "6e", "7e", "8e", "9e", "10e", "Je", "Qe", "Ke", "Ao", "2o", "3o", "4o", "5o", "6o", "7o", "8o",
                 "9o", "10o", "Jo", "Qo", "Ko", "Ap", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "Jp", "Qp",
-                "Kp"] * numero_de_baralhos
+                "Kp"]
 
 # Dificuldade do jogo
 dificuldade_jogo = input("Qual a dificuldade do jogo? (mf, f, m, d): ")
@@ -57,6 +53,7 @@ elif dificuldade_jogo == "m":
     numero_de_baralhos = 3
 elif dificuldade_jogo == "d":
     print("Boa sorte.")
+    numero_de_baralhos = 1
 
 # Recebe o quanto o jogador quer colocar na carteira.
 carteira = int(input("Quanto você quer gastar de dinheiro? (essa será sua carteira de apostas): "))
@@ -72,7 +69,6 @@ while carteira <= 0 or carteira > 1000000:
 #Parametros iniciais, definições de variáveis e listas.
 i = True
 contador_seguranca = 0
-
 
 while i:
     aposta_string = input("Quanto você quer apostar?: ")
@@ -97,11 +93,19 @@ while i:
                   "antes de ser expulso da mesa. ".format(5 - contador_seguranca))
             aposta_int = int(input("Quanto você quer apostar?: "))
 # Embaralhando as cartas.
-    quantidade_de_cartas = len(baralho_base)
-    monte_embaralhado = []
+    baralho = []
+    for t in range(0, numero_de_baralhos):
+        for a in range(len(baralho_base)):
+            baralho.append(baralho_base[a])
+    monte = []
+    quantidade_de_cartas = len(baralho)
     while quantidade_de_cartas != 0:
-        randomizador = random.randint(0, quantidade_de_cartas - 1)
-        carta = baralho_base[randomizador]
-        monte_embaralhado.append(carta)
-        baralho_base.remove(carta)
+        carta = baralho[random.randint(0, quantidade_de_cartas - 1)]
+        monte.append(carta)
+        indice_da_carta = 0
+        while indice_da_carta < quantidade_de_cartas:
+            if carta == baralho[indice_da_carta]:
+                del baralho[indice_da_carta]
+                break
+            indice_da_carta += 1
         quantidade_de_cartas -= 1
