@@ -33,6 +33,10 @@ baralho_base = ["Ac", "2c", "3c", "4c", "5c", "6c", "7c", "8c", "9c", "10c", "Jc
                 "5e", "6e", "7e", "8e", "9e", "10e", "Je", "Qe", "Ke", "Ao", "2o", "3o", "4o", "5o", "6o", "7o", "8o",
                 "9o", "10o", "Jo", "Qo", "Ko", "Ap", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "Jp", "Qp",
                 "Kp"]
+valor_cartas = {"Ac":11, "2c":2, "3c":3, "4c":4, "5c":5, "6c":6, "7c":7, "8c":8, "9c":9, "10c":10, "Jc":10, "Qc":10, "Kc":10, "Ae":11, "2e":2, "3e":3, "4e":4,
+                "5e":5, "6e":6, "7e":7, "8e":8, "9e":9, "10e":10, "Je":10, "Qe":10, "Ke":10, "Ao":11, "2o":2, "3o":3, "4o":4, "5o":5, "6o":6, "7o":7, "8o":8,
+                "9o":9, "10o":10, "Jo":10, "Qo":10, "Ko":10, "Ap":11, "2p":2, "3p":3, "4p":4, "5p":5, "6p":6, "7p":7, "8p":8, "9p":9, "10p":10, "Jp":10, "Qp":10,
+                "Kp":10}
 
 # Dificuldade do jogo
 dificuldade_jogo = input("Qual a dificuldade do jogo? (mf, f, m, d): ")
@@ -44,10 +48,10 @@ while dificuldade_jogo != "mf" and dificuldade_jogo != "f" and dificuldade_jogo 
 # Conforme a dificuldade aumenta, a disponibilidade de cartas fica mais escassa.
 if dificuldade_jogo == "mf":
     print("Ridículo.")
-    numero_de_baralhos = 10
+    numero_de_baralhos = 8
 elif dificuldade_jogo == "f":
     print("Fácil. Dificuldade para se divertir.")
-    numero_de_baralhos = 6
+    numero_de_baralhos = 5
 elif dificuldade_jogo == "m":
     print("Boa escolha, preferiu a segurança ao risco.")
     numero_de_baralhos = 3
@@ -92,6 +96,7 @@ while i:
             print("Você não tem esse dinheiro! Aposte de novo. Você tem mais {0} tentativas\n"
                   "antes de ser expulso da mesa. ".format(5 - contador_seguranca))
             aposta_int = int(input("Quanto você quer apostar?: "))
+    carteira -= aposta_int
 # Embaralhando as cartas.
     baralho = []
     for t in range(0, numero_de_baralhos):
@@ -113,4 +118,37 @@ while i:
     mao_jogador = []
     mao_jogador = monte[0:2].copy()
     del monte[0:2]
-    print ('Suas cartas são {0} e {1}.'.format(mao_jogador[0],mao_jogador[1]))
+    print ('Suas cartas são {0}.'.format(mao_jogador))
+    valor_mao = valor_cartas[mao_jogador[0]] + valor_cartas[mao_jogador[1]]
+    if valor_mao == 21:
+        carteira+=2.5*aposta_int
+        print('BLACKJACK!!!\nVocê ganhou R${0}.\nSaldo atual: R${1}.'.format(2.5*aposta_int,carteira))
+    else:
+        print('Você está com {0} pontos. O que deseja fazer?'.format(valor_mao))
+        escolha=input('Digite "mais uma" para mais cartas.\nQualquer outra palavra para o jogo: ')
+        indice_carta_mao=1
+        while escolha == 'mais uma':
+            indice_carta_mao+=1
+            mao_jogador.append(monte[0])
+            del monte[0]
+            valor_mao+=valor_cartas[mao_jogador[indice_carta_mao]]
+            if valor_mao>=21:
+                break
+            print ('Suas cartas são {0}.'.format(mao_jogador))
+            print('Você está com {0} pontos. O que deseja fazer?'.format(valor_mao))
+            escolha=input('Digite "mais uma" para mais cartas.\nQualquer outra palavra para o jogo: ')
+        if valor_mao == 21:
+            carteira+=2.5*aposta_int
+            print ('Suas cartas são {0}.'.format(mao_jogador))
+            print('BLACKJACK!!!\nVocê ganhou R${0}.\nSaldo atual: R${1}.'.format(2.5*aposta_int,carteira))
+        elif valor_mao > 21:
+            print ('Suas cartas são {0}.'.format(mao_jogador))
+            print('Você está com {0} pontos.'.format(valor_mao))
+            print('Você ultrapassou 21 pontos, e perdeu sua aposta.\nSaldo atual: R${0}.'.format(carteira))
+        else:
+            cartas_banca = []
+            cartas_banca = monte[0:2].copy()
+            del monte[0:2]
+            valor_banca = valor_cartas[cartas_banca[0]] + valor_cartas[cartas_banca[1]]
+            print('Suas cartas: {0}\nSeus pontos: {1}\nCartas da banca: {2}\nPontos da banca: {3}'.format(mao_jogador,valor_mao,cartas_banca,valor_banca))
+            input('Pressione "Enter" para a banca continuar sua jogada.')
