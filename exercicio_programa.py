@@ -1,6 +1,5 @@
 import random
 
-
 # Introducao do jogo para os players, alem de mostrar as regras do mesmo.
 def intro():
     print("♠♣ Bem vindo ao Blackjack! ♥♦\n"
@@ -47,26 +46,26 @@ while dificuldade_jogo != "mf" and dificuldade_jogo != "f" and dificuldade_jogo 
 
 # Conforme a dificuldade aumenta, a disponibilidade de cartas fica mais escassa.
 if dificuldade_jogo == "mf":
-    print("Ridículo.")
+    print("\nRidículo.")
     numero_de_baralhos = 8
 elif dificuldade_jogo == "f":
-    print("Fácil. Dificuldade para se divertir.")
+    print("\nFácil. Dificuldade para se divertir.")
     numero_de_baralhos = 5
 elif dificuldade_jogo == "m":
-    print("Boa escolha, preferiu a segurança ao risco.")
+    print("\nBoa escolha, preferiu a segurança ao risco.")
     numero_de_baralhos = 3
 elif dificuldade_jogo == "d":
-    print("Boa sorte.")
+    print("\nBoa sorte.")
     numero_de_baralhos = 1
 
 # Recebe o quanto o jogador quer colocar na carteira.
-carteira = int(input("Quanto você quer gastar de dinheiro? (essa será sua carteira de apostas): "))
+carteira = float(input("Quanto você quer gastar de dinheiro? (essa será sua carteira de apostas): "))
 while carteira <= 0 or carteira > 1000000:
     if carteira <= 0:
         print('Insira um valor de dinheiro verdadeiro')
     else:
         print('O casino possui um limite de R$1.000.000 por participante')
-    carteira = int(input("Quanto você quer gastar de dinheiro? (essa será sua carteira de apostas): "))
+    carteira = float(input("Quanto você quer gastar de dinheiro? (essa será sua carteira de apostas): "))
 
 # Loop do jogo.
 
@@ -75,11 +74,11 @@ i = True
 contador_seguranca = 0
 
 while i:
-    aposta_string = input("Quanto você quer apostar?: ")
+    aposta_string = input("Quanto você quer apostar? (Digite 'fim' para terminar o jogo): ")
     if aposta_string == "fim":
-        print("Obrigado por jogar! Volte sempre!")
+        print("Obrigadx por jogar! Volte sempre!")
         break
-    aposta_int = int(aposta_string)
+    aposta_int = float(aposta_string)
 #Criacao do loop para limite de erros na aposta.
     while aposta_int > carteira or aposta_int <= 0:
         contador_seguranca += 1
@@ -90,12 +89,12 @@ while i:
         if contador_seguranca == 4 and contador_seguranca != 5:
             print("Você não tem esse dinheiro! Aposte de novo. Essa é sua última tentativa\n"
                   "antes de ser expulso da mesa. ")
-            aposta_int = int(input("Quanto você quer apostar?: "))
+            aposta_int = float(input("Quanto você quer apostar? (Digite 'fim' para terminar o jogo): "))
             continue
         if contador_seguranca < 5:
             print("Você não tem esse dinheiro! Aposte de novo. Você tem mais {0} tentativas\n"
                   "antes de ser expulso da mesa. ".format(5 - contador_seguranca))
-            aposta_int = int(input("Quanto você quer apostar?: "))
+            aposta_int = float(input("Quanto você quer apostar? (Digite 'fim' para terminar o jogo): "))
     carteira -= aposta_int
 # Embaralhando as cartas.
     baralho = []
@@ -118,37 +117,64 @@ while i:
     mao_jogador = []
     mao_jogador = monte[0:2].copy()
     del monte[0:2]
-    print ('Suas cartas são {0}.'.format(mao_jogador))
+    print ('\nSuas cartas são {0}.'.format(mao_jogador))
+    contador_as=0
+    for carta in mao_jogador:
+        if carta == 'Ac' or carta == 'Ae' or carta == 'Ao' or carta == 'Ap':
+            contador_as+=1
     valor_mao = valor_cartas[mao_jogador[0]] + valor_cartas[mao_jogador[1]]
+    if valor_mao > 21:
+        valor_mao -= 10
+        contador_as -= 1
+#chacando se há blackjack
     if valor_mao == 21:
         carteira+=2.5*aposta_int
         print('BLACKJACK!!!\nVocê ganhou R${0}.\nSaldo atual: R${1}.'.format(2.5*aposta_int,carteira))
+#se não há blackjack, jogador escolhe sua ação
     else:
         print('Você está com {0} pontos. O que deseja fazer?'.format(valor_mao))
-        escolha=input('Digite "mais uma" para mais cartas.\nQualquer outra palavra para o jogo: ')
+        escolha=input('Digite "mais uma" para mais cartas.\nQualquer outra palavra interrompe o jogo: ')
         indice_carta_mao=1
         while escolha == 'mais uma':
             indice_carta_mao+=1
             mao_jogador.append(monte[0])
+            if monte[0]=='Ac' or monte[0] == 'Ae' or monte[0] == 'Ao' or monte[0] == 'Ap':
+                contador_as+=1
             del monte[0]
             valor_mao+=valor_cartas[mao_jogador[indice_carta_mao]]
-            if valor_mao>=21:
+            if valor_mao == 21:
                 break
-            print ('Suas cartas são {0}.'.format(mao_jogador))
+            if valor_mao > 21:
+                if contador_as > 0:
+                    valor_mao -= 10
+                    contador_as -= 1
+                    print('\nSua mão estava estourada, então seu A passa a valer 1 ponto.')
+                else:
+                    break
+            print ('\nSuas cartas são {0}.'.format(mao_jogador))
             print('Você está com {0} pontos. O que deseja fazer?'.format(valor_mao))
-            escolha=input('Digite "mais uma" para mais cartas.\nQualquer outra palavra para o jogo: ')
+            escolha=input('Digite "mais uma" para mais cartas.\nQualquer outra palavra interrompe o jogo: ')
+#jogo para porque jogador consegue 21
         if valor_mao == 21:
             carteira+=2.5*aposta_int
-            print ('Suas cartas são {0}.'.format(mao_jogador))
+            print ('\nSuas cartas são {0}.'.format(mao_jogador))
             print('BLACKJACK!!!\nVocê ganhou R${0}.\nSaldo atual: R${1}.'.format(2.5*aposta_int,carteira))
+#jogo para porque jogador ultrapassou 21
         elif valor_mao > 21:
-            print ('Suas cartas são {0}.'.format(mao_jogador))
+            print ('\nSuas cartas são {0}.'.format(mao_jogador))
             print('Você está com {0} pontos.'.format(valor_mao))
             print('Você ultrapassou 21 pontos, e perdeu sua aposta.\nSaldo atual: R${0}.'.format(carteira))
+#jogo para porque jogador pediu
+#aqui inicia o loop da banca
         else:
             cartas_banca = []
             cartas_banca = monte[0:2].copy()
             del monte[0:2]
+            contador_as=0
+            for carta in cartas_banca:
+                if carta == 'Ac' or carta == 'Ae' or carta == 'Ao' or carta == 'Ap':
+                    contador_as+=1
             valor_banca = valor_cartas[cartas_banca[0]] + valor_cartas[cartas_banca[1]]
-            print('Suas cartas: {0}\nSeus pontos: {1}\nCartas da banca: {2}\nPontos da banca: {3}'.format(mao_jogador,valor_mao,cartas_banca,valor_banca))
-            input('Pressione "Enter" para a banca continuar sua jogada.')
+            if valor_banca > 21:
+                valor_banca -= 10
+                contador_as -= 1
