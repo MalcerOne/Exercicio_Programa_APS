@@ -178,3 +178,33 @@ while i:
             if valor_banca > 21:
                 valor_banca -= 10
                 contador_as -= 1
+#blackjack da banca
+            if valor_banca == 21:
+                print('\nSuas cartas: {0}\nSeus pontos: {1}\nCartas da banca: {2}\nPontos da banca: {3}'.format(mao_jogador,valor_mao,cartas_banca,valor_banca))
+                print('É Blackjack para a banca... que azar para você.')
+#banca ganhando ou empate
+            elif valor_banca > valor_mao or (valor_banca >= 17 and valor_banca == valor_mao):
+                oi=0
+#banca com menos de 17 pontos
+            else:
+                print('\nSuas cartas: {0}\nSeus pontos: {1}\nCartas da banca: {2}\nPontos da banca: {3}'.format(mao_jogador,valor_mao,cartas_banca,valor_banca))
+                input('Pressione "Enter" para continuar.')
+            indice_carta_banca = 1
+            while valor_banca <= valor_mao and valor_banca < 17:
+                indice_carta_banca+=1
+                cartas_banca.append(monte[0])
+                if monte[0]=='Ac' or monte[0] == 'Ae' or monte[0] == 'Ao' or monte[0] == 'Ap':
+                    contador_as+=1
+                del monte[0]
+                valor_banca += valor_cartas[cartas_banca[indice_carta_banca]]
+#banca ultrapassou 21 pontos
+                if valor_banca > 21:
+                    if contador_as > 0:
+                        valor_banca -= 10
+                        contador_as -= 1
+                    else:
+                        break
+                elif valor_banca > valor_mao:
+                    break
+                print('Suas cartas: {0}\nSeus pontos: {1}\nCartas da banca: {2}\nPontos da banca: {3}'.format(mao_jogador,valor_mao,cartas_banca,valor_banca))
+                input('Pressione "Enter" para continuar.')
