@@ -208,3 +208,39 @@ while i:
                     break
                 print('Suas cartas: {0}\nSeus pontos: {1}\nCartas da banca: {2}\nPontos da banca: {3}'.format(mao_jogador,valor_mao,cartas_banca,valor_banca))
                 input('Pressione "Enter" para continuar.')
+#mensagens finais:
+#banca ganha
+            if valor_banca == 21:
+                if valor_banca-valor_mao != 1:
+                    print('A banca ganhou, por {0} pontos.\nSaldo atual: R${1}.'.format(valor_banca-valor_mao,carteira))
+                else:
+                    print('A banca ganhou, por 1 ponto.\nSaldo atual: R${0}.'.format(carteira))
+#banca ultrapassa 21
+            elif valor_banca > 21:
+                carteira += 2*aposta_int
+                print('\nSuas cartas: {0}\nSeus pontos: {1}\nCartas da banca: {2}\nPontos da banca: {3}'.format(mao_jogador,valor_mao,cartas_banca,valor_banca))
+                print('A banca ultrapassou 21 pontos.\nVocê ganhou R${0}!\nSaldo atual: {1}.'.format(2*aposta_int,carteira))
+#banca ganha
+            elif valor_banca > valor_mao:
+                print('\nSuas cartas: {0}\nSeus pontos: {1}\nCartas da banca: {2}\nPontos da banca: {3}'.format(mao_jogador,valor_mao,cartas_banca,valor_banca))
+                if valor_banca - valor_mao != 1:
+                    print('A banca ganhou, por {0} pontos.\nSaldo atual: R${1}.'.format(valor_banca-valor_mao,carteira))
+                else:
+                    print('A banca ganhou, por 1 ponto.\nSaldo atual: R${0}.'.format(carteira))
+#jogador ganha
+            elif valor_mao > valor_banca:
+                carteira += 2*aposta_int
+                print('\nSuas cartas: {0}\nSeus pontos: {1}\nCartas da banca: {2}\nPontos da banca: {3}'.format(mao_jogador,valor_mao,cartas_banca,valor_banca))
+                if valor_mao-valor_banca != 1:
+                    print('Você ganhou por {0} pontos!\nParabéns, você recebeu R${1}!\nSaldo atual: R${2}'.format(valor_mao-valor_banca, 2*aposta_int, carteira))
+                else:
+                    print('Você ganhou por 1 ponto!\nParabéns, você recebeu R${0}!\nSaldo atual: R${1}'.format(2*aposta_int, carteira))
+#empate
+            elif valor_banca == valor_mao:
+                carteira += aposta_int
+                print('\nSuas cartas: {0}\nSeus pontos: {1}\nCartas da banca: {2}\nPontos da banca: {3}'.format(mao_jogador,valor_mao,cartas_banca,valor_banca))
+                print('É um empate! Você recebe sua aposta de volta.\nSaldo atual: {0}'.format(carteira))
+#verifica se o jogador ainda tem saldo
+            if carteira == 0:
+                print('\nSua carteira está vazia.\nParece que hoje não era seu dia de sorte...\nObrigadx por jogar! Volte sempre!')
+                i = False
