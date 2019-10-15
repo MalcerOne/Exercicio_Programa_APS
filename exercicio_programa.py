@@ -15,7 +15,9 @@ def intro():
           '--> Se a soma de suas cartas for maior que 21, você perde na hora\n'
           '--> Se você ainda está no jogo, suas cartas são comparadas com a do\n'
           'dealer, e quem estiver mais próximo de 21 ganha a rodada. Se o dealer\n'
-          'estourar 21 pontos, você ganha também.\n\n'
+          'estourar 21 pontos, você ganha também.\n'
+          '--> As cartas denominadas "Ás" (A♦,A♠,A♥,A♣) valem 11 pontos. Porém,\n'
+          'se sua mão estourar, e você tiver um "Ás", ele passa a valer 1 ponto.\n\n'
           'As recompensas são as seguintes:\n'
           '--> Ganhar com Blackjack: retorno da aposta, mais 150% do seu valor.\n'
           '--> Ganhar: retorno da aposta, mais 100% do seu valor.\n\n'
@@ -29,14 +31,14 @@ def intro():
 intro()
 # Criacao dos baralhos
 
-baralho_base = ["Ac", "2c", "3c", "4c", "5c", "6c", "7c", "8c", "9c", "10c", "Jc", "Qc", "Kc", "Ae", "2e", "3e", "4e",
-                "5e", "6e", "7e", "8e", "9e", "10e", "Je", "Qe", "Ke", "Ao", "2o", "3o", "4o", "5o", "6o", "7o", "8o",
-                "9o", "10o", "Jo", "Qo", "Ko", "Ap", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "Jp", "Qp",
-                "Kp"]
-valor_cartas = {"Ac":11, "2c":2, "3c":3, "4c":4, "5c":5, "6c":6, "7c":7, "8c":8, "9c":9, "10c":10, "Jc":10, "Qc":10, "Kc":10, "Ae":11, "2e":2, "3e":3, "4e":4,
-                "5e":5, "6e":6, "7e":7, "8e":8, "9e":9, "10e":10, "Je":10, "Qe":10, "Ke":10, "Ao":11, "2o":2, "3o":3, "4o":4, "5o":5, "6o":6, "7o":7, "8o":8,
-                "9o":9, "10o":10, "Jo":10, "Qo":10, "Ko":10, "Ap":11, "2p":2, "3p":3, "4p":4, "5p":5, "6p":6, "7p":7, "8p":8, "9p":9, "10p":10, "Jp":10, "Qp":10,
-                "Kp":10}
+baralho_base = ["A♥", "2♥", "3♥", "4♥", "5♥", "6♥", "7♥", "8♥", "9♥", "10♥", "J♥", "Q♥", "K♥", "A♠", "2♠", "3♠", "4♠",
+                "5♠", "6♠", "7♠", "8♠", "9♠", "10♠", "J♠", "Q♠", "K♠", "A♦", "2♦", "3♦", "4♦", "5♦", "6♦", "7♦", "8♦",
+                "9♦", "10♦", "J♦", "Q♦", "K♦", "A♣", "2♣", "3♣", "4♣", "5♣", "6♣", "7♣", "8♣", "9♣", "10♣", "J♣", "Q♣",
+                "K♣"]
+valor_cartas = {"A♥":11, "2♥":2, "3♥":3, "4♥":4, "5♥":5, "6♥":6, "7♥":7, "8♥":8, "9♥":9, "10♥":10, "J♥":10, "Q♥":10, "K♥":10, "A♠":11, "2♠":2, "3♠":3, "4♠":4,
+                "5♠":5, "6♠":6, "7♠":7, "8♠":8, "9♠":9, "10♠":10, "J♠":10, "Q♠":10, "K♠":10, "A♦":11, "2♦":2, "3♦":3, "4♦":4, "5♦":5, "6♦":6, "7♦":7, "8♦":8,
+                "9♦":9, "10♦":10, "J♦":10, "Q♦":10, "K♦":10, "A♣":11, "2♣":2, "3♣":3, "4♣":4, "5♣":5, "6♣":6, "7♣":7, "8♣":8, "9♣":9, "10♣":10, "J♣":10, "Q♣":10,
+                "K♣":10}
 
 # Dificuldade do jogo
 dificuldade_jogo = input("Qual a dificuldade do jogo? (mf, f, m, d): ")
@@ -55,7 +57,7 @@ elif dificuldade_jogo == "f":
 elif dificuldade_jogo == "m":
     print("\n3 baralhos. Boa escolha, preferiu a segurança ao risco.")
     numero_de_baralhos = 3
-elif dificuldade_jogo == "d":
+else:
     print("\n1 baralho. Boa sorte.")
     numero_de_baralhos = 1
 
@@ -90,9 +92,14 @@ contador_seguranca = 0
 while i:
     aposta_string = input("Quanto você quer apostar nessa rodada? (Digite 'fim' para terminar o jogo): ")
     if aposta_string == "fim":
-        print("Obrigadx por jogar! Volte sempre!")
+        print("\nObrigadx por jogar! Volte sempre!")
         break
-    aposta_int = float(aposta_string)
+    aposta_int = aposta_string
+    while type(aposta_int) == type(aposta_string):
+        try:
+            aposta_int = float(aposta_string)
+        except ValueError:
+            aposta_int = 0
 #Criacao do loop para limite de erros na aposta.
     while aposta_int > carteira or aposta_int <= 0:
         contador_seguranca += 1
@@ -101,22 +108,32 @@ while i:
             i = False
             break
         if contador_seguranca == 4 and contador_seguranca != 5:
-            print("Você não tem esse dinheiro! Aposte de novo. Essa é sua última tentativa\n"
+            print("\nVocê não pode fazer isso! Aposte de novo. Essa é sua última tentativa\n"
                   "antes de ser expulso da mesa. ")
             aposta_string = input("Quanto você quer apostar nessa rodada? (Digite 'fim' para terminar o jogo): ")
             if aposta_string == "fim":
-                print("Obrigadx por jogar! Volte sempre!")
+                print("\nObrigadx por jogar! Volte sempre!")
                 break
-            aposta_int = float(aposta_string)
+            aposta_int = aposta_string
+            while type(aposta_int) == type(aposta_string):
+                try:
+                    aposta_int = float(aposta_string)
+                except ValueError:
+                    aposta_int = 0
             continue
         if contador_seguranca < 5:
-            print("Você não tem esse dinheiro! Aposte de novo. Você tem mais {0} tentativas\n"
+            print("\nVocê não pode fazer isso! Aposte de novo. Você tem mais {0} tentativas\n"
                   "antes de ser expulso da mesa. ".format(5 - contador_seguranca))
             aposta_string = input("Quanto você quer apostar nessa rodada? (Digite 'fim' para terminar o jogo): ")
             if aposta_string == "fim":
-                print("Obrigadx por jogar! Volte sempre!")
+                print("\nObrigadx por jogar! Volte sempre!")
                 break
-            aposta_int = float(aposta_string)
+            aposta_int = aposta_string
+            while type(aposta_int) == type(aposta_string):
+                try:
+                    aposta_int = float(aposta_string)
+                except ValueError:
+                    aposta_int = 0
     if aposta_string == "fim":
         break
     carteira -= aposta_int
@@ -138,13 +155,12 @@ while i:
             indice_da_carta += 1
         quantidade_de_cartas -= 1
 #Computador dá as duas cartas do topo do monte para o jogador
-    mao_jogador = []
     mao_jogador = monte[0:2].copy()
     del monte[0:2]
     print ('\nSuas cartas são {0}.'.format(mao_jogador))
     contador_as=0
     for carta in mao_jogador:
-        if carta == 'Ac' or carta == 'Ae' or carta == 'Ao' or carta == 'Ap':
+        if carta == 'A♥' or carta == 'A♠' or carta == 'A♦' or carta == 'A♣':
             contador_as+=1
     valor_mao = valor_cartas[mao_jogador[0]] + valor_cartas[mao_jogador[1]]
     if valor_mao > 21:
@@ -154,124 +170,123 @@ while i:
     if valor_mao == 21:
         carteira+=2.5*aposta_int
         print('BLACKJACK!!!\nVocê ganhou R${0}.\nSaldo atual: R${1}.'.format(2.5*aposta_int,carteira))
+        continue
 #se não há blackjack, jogador escolhe sua ação
-    else:
+    print('Você está com {0} pontos. O que deseja fazer?'.format(valor_mao))
+    escolha=input('Digite "mais uma" para mais cartas.\nPressione apenas "Enter" para concluir sua rodada: ')
+    while escolha != 'mais uma' and escolha != '':
+        print('\nJogada inválida. Agora que começou a rodada, vá até o fim.')
+        escolha=input('Digite "mais uma" para mais cartas.\nPressione apenas "Enter" para concluir sua rodada: ')
+    indice_carta_mao=1
+    while escolha == 'mais uma':
+        indice_carta_mao+=1
+        mao_jogador.append(monte[0])
+        if monte[0]=='A♥' or monte[0] == 'A♠' or monte[0] == 'A♦' or monte[0] == 'A♣':
+            contador_as+=1
+        del monte[0]
+        valor_mao+=valor_cartas[mao_jogador[indice_carta_mao]]
+        if valor_mao == 21:
+            break
+        if valor_mao > 21:
+            if contador_as > 0:
+                valor_mao -= 10
+                contador_as -= 1
+                print('\nSua mão estava estourada, então seu Ás passa a valer 1 ponto.')
+            else:
+                break
+        print ('\nSuas cartas são {0}.'.format(mao_jogador))
         print('Você está com {0} pontos. O que deseja fazer?'.format(valor_mao))
         escolha=input('Digite "mais uma" para mais cartas.\nPressione apenas "Enter" para concluir sua rodada: ')
         while escolha != 'mais uma' and escolha != '':
             print('Jogada inválida. Agora que começou a rodada, vá até o fim.')
             escolha=input('Digite "mais uma" para mais cartas.\nPressione apenas "Enter" para concluir sua rodada: ')
-        indice_carta_mao=1
-        while escolha == 'mais uma':
-            indice_carta_mao+=1
-            mao_jogador.append(monte[0])
-            if monte[0]=='Ac' or monte[0] == 'Ae' or monte[0] == 'Ao' or monte[0] == 'Ap':
-                contador_as+=1
-            del monte[0]
-            valor_mao+=valor_cartas[mao_jogador[indice_carta_mao]]
-            if valor_mao == 21:
-                break
-            if valor_mao > 21:
-                if contador_as > 0:
-                    valor_mao -= 10
-                    contador_as -= 1
-                    print('\nSua mão estava estourada, então seu A passa a valer 1 ponto.')
-                else:
-                    break
-            print ('\nSuas cartas são {0}.'.format(mao_jogador))
-            print('Você está com {0} pontos. O que deseja fazer?'.format(valor_mao))
-            escolha=input('Digite "mais uma" para mais cartas.\nPressione apenas "Enter" para concluir sua rodada: ')
-            while escolha != 'mais uma' and escolha != '':
-                print('Jogada inválida. Agora que começou a rodada, vá até o fim.')
-                escolha=input('Digite "mais uma" para mais cartas.\nPressione apenas "Enter" para concluir sua rodada: ')
 #jogo para porque jogador consegue 21
-        if valor_mao == 21:
-            carteira+=2.5*aposta_int
-            print ('\nSuas cartas são {0}.'.format(mao_jogador))
-            print('BLACKJACK!!!\nVocê ganhou R${0}.\nSaldo atual: R${1}.'.format(2.5*aposta_int,carteira))
+    if valor_mao == 21:
+        carteira+=2.5*aposta_int
+        print ('\nSuas cartas são {0}.'.format(mao_jogador))
+        print('BLACKJACK!!!\nVocê ganhou R${0}.\nSaldo atual: R${1}.'.format(2.5*aposta_int,carteira))
 #jogo para porque jogador ultrapassou 21
-        elif valor_mao > 21:
-            print ('\nSuas cartas são {0}.'.format(mao_jogador))
-            print('Você está com {0} pontos.'.format(valor_mao))
-            print('Você ultrapassou 21 pontos, e perdeu sua aposta.\nSaldo atual: R${0}.'.format(carteira))
-            if carteira == 0:
-                print('\nSua carteira está vazia.\nParece que hoje não era seu dia de sorte...\nObrigadx por jogar! Volte sempre!')
-                i = False
+    elif valor_mao > 21:
+        print ('\nSuas cartas são {0}.'.format(mao_jogador))
+        print('Você está com {0} pontos.'.format(valor_mao))
+        print('Você ultrapassou 21 pontos, e perdeu sua aposta.\nSaldo atual: R${0}.'.format(carteira))
+        if carteira == 0:
+            print('\nSua carteira está vazia.\nParece que hoje não era seu dia de sorte...\nObrigadx por jogar! Volte sempre!')
+            i = False
 #jogo para porque jogador pediu
 #aqui inicia o loop da banca
-        else:
-            cartas_banca = []
-            cartas_banca = monte[0:2].copy()
-            del monte[0:2]
-            contador_as=0
-            for carta in cartas_banca:
-                if carta == 'Ac' or carta == 'Ae' or carta == 'Ao' or carta == 'Ap':
-                    contador_as+=1
-            valor_banca = valor_cartas[cartas_banca[0]] + valor_cartas[cartas_banca[1]]
-            if valor_banca > 21:
-                valor_banca -= 10
-                contador_as -= 1
-#blackjack da banca                
-            if valor_banca == 21 or valor_banca > valor_mao or (valor_banca >= 17 and valor_banca == valor_mao) or (valor_mao > valor_banca and valor_banca >= 17):
-                oi=0
+    else:
+        cartas_banca = monte[0:2].copy()
+        del monte[0:2]
+        contador_as=0
+        for carta in cartas_banca:
+            if carta == 'A♥' or carta == 'A♠' or carta == 'A♦' or carta == 'A♣':
+                contador_as+=1
+        valor_banca = valor_cartas[cartas_banca[0]] + valor_cartas[cartas_banca[1]]
+        if valor_banca > 21:
+            valor_banca -= 10
+            contador_as -= 1
+#blackjack da banca
+        if valor_banca == 21 or valor_banca > valor_mao or (valor_banca >= 17 and valor_banca == valor_mao) or (valor_mao > valor_banca and valor_banca >= 17):
+            oi=0
 #banca com menos de 17 pontos
-            else:
-                print('\nSuas cartas: {0}\nSeus pontos: {1}\nCartas da banca: {2}\nPontos da banca: {3}'.format(mao_jogador,valor_mao,cartas_banca,valor_banca))
-                input('Pressione "Enter" para continuar.')
-            indice_carta_banca = 1
-            while valor_banca <= valor_mao and valor_banca < 17:
-                indice_carta_banca+=1
-                cartas_banca.append(monte[0])
-                if monte[0]=='Ac' or monte[0] == 'Ae' or monte[0] == 'Ao' or monte[0] == 'Ap':
-                    contador_as+=1
-                del monte[0]
-                valor_banca += valor_cartas[cartas_banca[indice_carta_banca]]
+        else:
+            print('\nSuas cartas: {0}\nSeus pontos: {1}\nCartas da banca: {2}\nPontos da banca: {3}'.format(mao_jogador,valor_mao,cartas_banca,valor_banca))
+            input('Pressione "Enter" para continuar.')
+        indice_carta_banca = 1
+        while valor_banca <= valor_mao and valor_banca < 17:
+            indice_carta_banca+=1
+            cartas_banca.append(monte[0])
+            if monte[0]=='A♥' or monte[0] == 'A♠' or monte[0] == 'A♦' or monte[0] == 'A♣':
+                contador_as+=1
+            del monte[0]
+            valor_banca += valor_cartas[cartas_banca[indice_carta_banca]]
 #banca ultrapassou 21 pontos
-                if valor_banca > 21:
-                    if contador_as > 0:
-                        valor_banca -= 10
-                        contador_as -= 1
-                    else:
-                        break
-                elif valor_banca > valor_mao:
+            if valor_banca > 21:
+                if contador_as > 0:
+                    valor_banca -= 10
+                    contador_as -= 1
+                else:
                     break
-                print('Suas cartas: {0}\nSeus pontos: {1}\nCartas da banca: {2}\nPontos da banca: {3}'.format(mao_jogador,valor_mao,cartas_banca,valor_banca))
-                input('Pressione "Enter" para continuar.')
+            elif valor_banca > valor_mao:
+                break
+            print('Suas cartas: {0}\nSeus pontos: {1}\nCartas da banca: {2}\nPontos da banca: {3}'.format(mao_jogador,valor_mao,cartas_banca,valor_banca))
+            input('Pressione "Enter" para continuar.')
 #mensagens finais:
 #banca ganha com 21
-            if valor_banca == 21:
-                print('\nÉ Blackjack para a banca... que azar para você.')
-                print('Suas cartas: {0}\nSeus pontos: {1}\nCartas da banca: {2}\nPontos da banca: {3}'.format(mao_jogador,valor_mao,cartas_banca,valor_banca))
-                if valor_banca-valor_mao != 1:
-                    print('A banca ganhou, por {0} pontos.\nSaldo atual: R${1}.'.format(valor_banca-valor_mao,carteira))
-                else:
-                    print('A banca ganhou, por 1 ponto.\nSaldo atual: R${0}.'.format(carteira))
+        if valor_banca == 21:
+            print('\nÉ Blackjack para a banca... que azar para você.')
+            print('Suas cartas: {0}\nSeus pontos: {1}\nCartas da banca: {2}\nPontos da banca: {3}'.format(mao_jogador,valor_mao,cartas_banca,valor_banca))
+            if valor_banca-valor_mao != 1:
+                print('A banca ganhou, por {0} pontos.\nSaldo atual: R${1}.'.format(valor_banca-valor_mao,carteira))
+            else:
+                print('A banca ganhou, por 1 ponto.\nSaldo atual: R${0}.'.format(carteira))
 #banca ultrapassa 21
-            elif valor_banca > 21:
-                carteira += 2*aposta_int
-                print('\nSuas cartas: {0}\nSeus pontos: {1}\nCartas da banca: {2}\nPontos da banca: {3}'.format(mao_jogador,valor_mao,cartas_banca,valor_banca))
-                print('A banca ultrapassou 21 pontos.\nVocê ganhou R${0}!\nSaldo atual: {1}.'.format(2*aposta_int,carteira))
+        elif valor_banca > 21:
+            carteira += 2*aposta_int
+            print('\nSuas cartas: {0}\nSeus pontos: {1}\nCartas da banca: {2}\nPontos da banca: {3}'.format(mao_jogador,valor_mao,cartas_banca,valor_banca))
+            print('A banca ultrapassou 21 pontos.\nVocê ganhou R${0}!\nSaldo atual: {1}.'.format(2*aposta_int,carteira))
 #banca ganha
-            elif valor_banca > valor_mao:
-                print('\nSuas cartas: {0}\nSeus pontos: {1}\nCartas da banca: {2}\nPontos da banca: {3}'.format(mao_jogador,valor_mao,cartas_banca,valor_banca))
-                if valor_banca - valor_mao != 1:
-                    print('A banca ganhou, por {0} pontos.\nSaldo atual: R${1}.'.format(valor_banca-valor_mao,carteira))
-                else:
-                    print('A banca ganhou, por 1 ponto.\nSaldo atual: R${0}.'.format(carteira))
+        elif valor_banca > valor_mao:
+            print('\nSuas cartas: {0}\nSeus pontos: {1}\nCartas da banca: {2}\nPontos da banca: {3}'.format(mao_jogador,valor_mao,cartas_banca,valor_banca))
+            if valor_banca - valor_mao != 1:
+                print('A banca ganhou, por {0} pontos.\nSaldo atual: R${1}.'.format(valor_banca-valor_mao,carteira))
+            else:
+                print('A banca ganhou, por 1 ponto.\nSaldo atual: R${0}.'.format(carteira))
 #jogador ganha
-            elif valor_mao > valor_banca:
-                carteira += 2*aposta_int
-                print('\nSuas cartas: {0}\nSeus pontos: {1}\nCartas da banca: {2}\nPontos da banca: {3}'.format(mao_jogador,valor_mao,cartas_banca,valor_banca))
-                if valor_mao-valor_banca != 1:
-                    print('Você ganhou por {0} pontos!\nParabéns, você recebeu R${1}!\nSaldo atual: R${2}'.format(valor_mao-valor_banca, 2*aposta_int, carteira))
-                else:
-                    print('Você ganhou por 1 ponto!\nParabéns, você recebeu R${0}!\nSaldo atual: R${1}'.format(2*aposta_int, carteira))
+        elif valor_mao > valor_banca:
+            carteira += 2*aposta_int
+            print('\nSuas cartas: {0}\nSeus pontos: {1}\nCartas da banca: {2}\nPontos da banca: {3}'.format(mao_jogador,valor_mao,cartas_banca,valor_banca))
+            if valor_mao-valor_banca != 1:
+                print('Você ganhou por {0} pontos!\nParabéns, você recebeu R${1}!\nSaldo atual: R${2}'.format(valor_mao-valor_banca, 2*aposta_int, carteira))
+            else:
+                print('Você ganhou por 1 ponto!\nParabéns, você recebeu R${0}!\nSaldo atual: R${1}'.format(2*aposta_int, carteira))
 #empate
-            elif valor_banca == valor_mao:
-                carteira += aposta_int
-                print('\nSuas cartas: {0}\nSeus pontos: {1}\nCartas da banca: {2}\nPontos da banca: {3}'.format(mao_jogador,valor_mao,cartas_banca,valor_banca))
-                print('É um empate! Você recebe sua aposta de volta.\nSaldo atual: {0}'.format(carteira))
+        elif valor_banca == valor_mao:
+            carteira += aposta_int
+            print('\nSuas cartas: {0}\nSeus pontos: {1}\nCartas da banca: {2}\nPontos da banca: {3}'.format(mao_jogador,valor_mao,cartas_banca,valor_banca))
+            print('É um empate! Você recebe sua aposta de volta.\nSaldo atual: {0}'.format(carteira))
 #verifica se o jogador ainda tem saldo
-            if carteira == 0:
-                print('\nSua carteira está vazia.\nParece que hoje não era seu dia de sorte...\nObrigadx por jogar! Volte sempre!')
-                i = False
+        if carteira == 0:
+            print('\nSua carteira está vazia.\nParece que hoje não era seu dia de sorte...\nObrigadx por jogar! Volte sempre!')
+            i = False
