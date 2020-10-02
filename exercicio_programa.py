@@ -30,29 +30,37 @@ def intro():
           "\n--> Se divirta!")
 
 
+def define_dificuldade_jogo():
+    dificuldade = input("\n\nQual a dificuldade do jogo? (mf, f, m, d): ")
+    repostas_possiveis = ["mf", "f", "m", "d"]
+    while dificuldade not in repostas_possiveis:
+        print("Desculpe, dificuldade não encontrada. Tente de novo.")
+        dificuldade = input("\n\nQual a dificuldade do jogo? (mf, f, m, d): ")
+
+    return dificuldade
+
+
+def define_numero_baralhos(dificuldade_jogo):
+    if dificuldade_jogo == "mf":
+        print("\n8 baralhos. Ridículo.")
+        numero_de_baralhos = 8
+    elif dificuldade_jogo == "f":
+        print("\n5 baralhos. Fácil. Dificuldade para se divertir.")
+        numero_de_baralhos = 5
+    elif dificuldade_jogo == "m":
+        print("\n3 baralhos. Boa escolha, preferiu a segurança ao risco.")
+        numero_de_baralhos = 3
+    else:
+        print("\n1 baralho. Boa sorte.")
+        numero_de_baralhos = 1
+
+
 intro()
 
-
-# Dificuldade do jogo
-dificuldade_jogo = input("\n\nQual a dificuldade do jogo? (mf, f, m, d): ")
-while dificuldade_jogo != "mf" and dificuldade_jogo != "f" and dificuldade_jogo != "m" and dificuldade_jogo != "d":
-    print("Desculpe, dificuldade não encontrada. Tente de novo.")
-    dificuldade_jogo = input("Qual a dificuldade do jogo? (mf, f, m, d): ")
-
+dificuldade_jogo = define_dificuldade_jogo()
 
 # Conforme a dificuldade aumenta, a disponibilidade de cartas fica mais escassa.
-if dificuldade_jogo == "mf":
-    print("\n8 baralhos. Ridículo.")
-    numero_de_baralhos = 8
-elif dificuldade_jogo == "f":
-    print("\n5 baralhos. Fácil. Dificuldade para se divertir.")
-    numero_de_baralhos = 5
-elif dificuldade_jogo == "m":
-    print("\n3 baralhos. Boa escolha, preferiu a segurança ao risco.")
-    numero_de_baralhos = 3
-else:
-    print("\n1 baralho. Boa sorte.")
-    numero_de_baralhos = 1
+numero_de_baralhos = define_numero_baralhos(dificuldade_jogo)
 
 
 # Código para criação de multijogador
@@ -104,8 +112,8 @@ valor_cartas = {"A♥": 11, "2♥": 2, "3♥": 3, "4♥": 4, "5♥": 5, "6♥": 
 
 # Recebe o quanto cada jogador quer colocar na carteira.
 for pessoa in lista_jogadores:
-    carteira_string = input("Quanto você quer gastar de dinheiro, {0}?\n"
-                            "(Essa será sua carteira de apostas): ".format(pessoa))
+    carteira_string = input("{0}, quanto você quer gastar de dinheiro?\n"
+                            "(Seu valor de carteira inicial): ".format(pessoa))
     carteira = carteira_string
     while type(carteira) == type(carteira_string):
         try:
@@ -182,9 +190,11 @@ while num_jogadores > 0:
         if contador_seguranca[jogador_atual] == 4 and contador_seguranca[jogador_atual] != 5:
             print("\nVocê não pode fazer isso! Aposte de novo. Essa é sua última tentativa\n"
                   "antes de ser expulso da mesa. ")
-            aposta_string = input("Quanto você quer apostar nessa rodada? (Digite 'fim' para terminar o jogo): ")
+            aposta_string = input(
+                "Quanto você quer apostar nessa rodada? (Digite 'fim' para terminar o jogo): ")
             if aposta_string == "fim":
-                print("\nObrigado por jogar, {0}! Volte sempre!".format(player))
+                print(
+                    "\nObrigado por jogar, {0}! Volte sempre!".format(player))
                 del lista_jogadores[player]
                 del contador_seguranca[jogador_atual]
                 num_jogadores -= 1
@@ -207,9 +217,11 @@ while num_jogadores > 0:
         if contador_seguranca[jogador_atual] < 5:
             print("\nVocê não pode fazer isso! Aposte de novo. Você tem mais {0} tentativas\n"
                   "antes de ser expulso da mesa. ".format(5 - contador_seguranca[jogador_atual]))
-            aposta_string = input("Quanto você quer apostar nessa rodada? (Digite 'fim' para terminar o jogo): ")
+            aposta_string = input(
+                "Quanto você quer apostar nessa rodada? (Digite 'fim' para terminar o jogo): ")
             if aposta_string == "fim":
-                print("\nObrigado por jogar, {0}! Volte sempre!".format(player))
+                print(
+                    "\nObrigado por jogar, {0}! Volte sempre!".format(player))
                 del lista_jogadores[player]
                 del contador_seguranca[jogador_atual]
                 num_jogadores -= 1
@@ -279,7 +291,8 @@ while num_jogadores > 0:
     # Checando se há blackjack
     if valor_mao == 21:
         lista_jogadores[player] += 2.5 * aposta_int
-        print('BLACKJACK!!!\nVocê ganhou R${0}.\nSaldo atual: {1}.'.format(2.5 * aposta_int, lista_jogadores))
+        print('BLACKJACK!!!\nVocê ganhou R${0}.\nSaldo atual: {1}.'.format(
+            2.5 * aposta_int, lista_jogadores))
         jogador_atual += 1
         if jogador_atual == num_jogadores:
             jogador_atual = 0
@@ -287,10 +300,12 @@ while num_jogadores > 0:
 
     # Se não há blackjack, jogador escolhe sua ação
     print('Você está com {0} pontos. O que deseja fazer?'.format(valor_mao))
-    escolha = input('Digite "mais uma" para mais cartas.\nPressione apenas "Enter" para concluir sua rodada: ')
+    escolha = input(
+        'Digite "mais uma" para mais cartas.\nPressione apenas "Enter" para concluir sua rodada: ')
     while escolha != 'mais uma' and escolha != '':
         print('\nJogada inválida. Agora que começou a rodada, vá até o fim.')
-        escolha = input('Digite "mais uma" para mais cartas.\nPressione apenas "Enter" para concluir sua rodada: ')
+        escolha = input(
+            'Digite "mais uma" para mais cartas.\nPressione apenas "Enter" para concluir sua rodada: ')
     indice_carta_mao = 1
     while escolha == 'mais uma':
         indice_carta_mao += 1
@@ -309,7 +324,8 @@ while num_jogadores > 0:
             else:
                 break
         print('\nSuas cartas são {0}.'.format(mao_jogador))
-        print('Você está com {0} pontos. O que deseja fazer?'.format(valor_mao))
+        print(
+            'Você está com {0} pontos. O que deseja fazer?'.format(valor_mao))
         escolha = input('Digite "mais uma" para mais cartas.'
                         '\nPressione apenas "Enter" para concluir sua rodada: ')
         while escolha != 'mais uma' and escolha != '':
@@ -332,7 +348,8 @@ while num_jogadores > 0:
     elif valor_mao > 21:
         print('\nSuas cartas são {0}.'.format(mao_jogador))
         print('Você está com {0} pontos.'.format(valor_mao))
-        print('Você ultrapassou 21 pontos, e perdeu sua aposta.\nSaldo atual: {0}.'.format(lista_jogadores))
+        print('Você ultrapassou 21 pontos, e perdeu sua aposta.\nSaldo atual: {0}.'.format(
+            lista_jogadores))
         if lista_jogadores[player] == 0:
             print('\nSua carteira está vazia.'
                   '\nParece que hoje não era seu dia de sorte...'
@@ -359,7 +376,8 @@ while num_jogadores > 0:
         for carta in cartas_banca:
             if carta == 'A♥' or carta == 'A♠' or carta == 'A♦' or carta == 'A♣':
                 contador_as += 1
-        valor_banca = valor_cartas[cartas_banca[0]] + valor_cartas[cartas_banca[1]]
+        valor_banca = valor_cartas[cartas_banca[0]
+                                   ] + valor_cartas[cartas_banca[1]]
         if valor_banca > 21:
             valor_banca -= 10
             contador_as -= 1
